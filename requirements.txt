@@ -1,0 +1,10 @@
+pandas
+fastapi
+uvicorn
+dotenv
+langchain_community
+langchain
+langchain_core
+langchain_pinecone
+langchain_openai
+PyPDF
