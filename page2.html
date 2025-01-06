@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RAG API Tester</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    label {
+      font-weight: bold;
+    }
+    textarea, input, button {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      background-color: #28a745;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #218838;
+    }
+    .response {
+      border: 1px solid #ccc;
+      padding: 10px;
+      border-radius: 5px;
+      background-color: #f9f9f9;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Test RAG API</h1>
+    
+    <!-- Ask Question Form -->
+    <form id="questionForm">
+      <label for="question">Enter Your Question:</label>
+      <textarea id="question" rows="4" placeholder="Type your question here..."></textarea>
+      <button type="submit">Ask</button>
+    </form>
+    
+    <!-- Response Section -->
+    <div id="responseSection">
+      <h2>Response:</h2>
+      <div class="response" id="responseOutput">No response yet.</div>
+    </div>
+  </div>
+
+  <script>
+    const apiUrl = "https://app-598234327672.us-central1.run.app/ask"; // Replace with your deployed API URL
+
+    document.getElementById("questionForm").addEventListener("submit", async (event) => {
+      event.preventDefault(); // Prevent form from submitting normally
+      
+      const question = document.getElementById("question").value.trim();
+      if (!question) {
+        alert("Please enter a question.");
+        return;
+      }
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 30000);
+      
+      try {
+        const response = await fetch(apiUrl, {
+          method: "POST",
+          mode: 'no-cors',
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ question }),
+          signal: controller.signal
+        });
+        clearTimeout(timeoutId);
+        const data = await response.json();
+        // Process response
+      } catch (error) {
+        if (error.name === "AbortError") {
+          console.error("Request timed out.");
+        } else if (response.ok) {
+          document.getElementById("responseOutput").textContent = data.response;
+        } else {
+          console.error("An error occurred:", error);
+        }
+      }
+
+      /*try {
+        // Send the POST request to the API
+        const response = await fetch(apiUrl, {
+          method: "POST",
+          mode: 'no-cors',
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ question })
+        });
+        
+        // Parse the response
+        const data = await response.json();
+        if (response.ok) {
+          document.getElementById("responseOutput").textContent = data.response;
+        } else {
+          document.getElementById("responseOutput").textContent = `Error: ${data.detail || "Unknown error"}`;
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        document.getElementById("responseOutput").textContent = "An error occurred while communicating with the API.";
+      }
+        */
+    });
+  </script>
+</body>
+</html>
