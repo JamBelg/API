@@ -6,6 +6,8 @@ from cachetools import cached, TTLCache
 from functools import lru_cache
 
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+
 from contextlib import asynccontextmanager
 from pydantic import BaseModel
 
@@ -121,7 +123,13 @@ app = FastAPI(
     lifespan = lifespan
 )
 
-
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Adjust to restrict specific origins if needed
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Homepage
 @app.get("/")
