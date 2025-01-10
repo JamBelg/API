@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 import os
 import re
+import time
 # cache memory
 from cachetools import cached, TTLCache
 from functools import lru_cache
@@ -136,6 +137,22 @@ app.add_middleware(
 async def root():
     return {"message":"API is running."}
 
+# API info
+@app.get("/info")
+async def get_info():
+    return {"Python":"3.1",
+            "Workflow":"FastAPI",
+            "Context docs":["https://arxiv.org/pdf/2402.16893",
+                "https://arxiv.org/pdf/2312.10997",
+                "https://arxiv.org/pdf/2408.10343",
+                "https://arxiv.org/pdf/2409.14924",
+                "https://arxiv.org/pdf/2406.07348"],
+            "Docs split": "chunks of size 1000 with averlaps of 100",
+            "LLM":"GPT-4",
+            "Retriever":"Pinecone",
+            "Retriever metric":"Cosine distance",
+            "Retriever relevant docs":"3"}
+
 # Read doc
 @app.get("/page/{index}")
 async def get_page(index:int):
@@ -152,10 +169,12 @@ class QuestionRequest(BaseModel):
 class RAGresponse(BaseModel):
     question: str
     response: str
+    time: str
 
 @app.post("/ask", response_model=RAGresponse)
 async def ask_question(request:QuestionRequest):
     try:
+        start_time = time.time()
         # Retrieve relevant documents
         relevant_docs = retriever.get_relevant_documents(request.question)
 
@@ -174,10 +193,12 @@ async def ask_question(request:QuestionRequest):
         )
 
         result = chain.invoke({"question": request.question, "context": context})
+        exec_time = "%.2f seconds" % (time.time()-start_time)
 
         return {
             "question": request.question,
-            "response": result
+            "response": result,
+            "time": exec_time,
         }
 
     except Exception as e:
