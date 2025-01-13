@@ -49,7 +49,7 @@ def load_docs():
         text_splitter = RecursiveCharacterTextSplitter(chunk_size= 1000, chunk_overlap= 100)
         pages = loader.load_and_split(text_splitter)
         docs.extend(pages)
-    return docs
+    return docs, pdf_list
 
 # Load model
 @lru_cache(maxsize=1)
@@ -96,11 +96,11 @@ def load_parser():
     return parser
 
 def initialize_api():
-    global model, embeddings, docs, retriever, prompt, parser
+    global model, embeddings, docs, pdf_list, retriever, prompt, parser
     load_api_keys()
     model = load_model(api_key=openai_api_key)
     embeddings = load_embeddings(api_key=openai_api_key)
-    docs = load_docs()
+    docs, pdf_list = load_docs()
     prompt = define_prompt()
     retriever = load_retriever(api_key=pinecone_api_key,
                                docs = docs,
@@ -111,7 +111,9 @@ def initialize_api():
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    time1 = time.time()
     initialize_api()
+    print("Time elapsed loading api: %.2f seconds" % (time.time()-time1))
     try:
         yield
     finally:
@@ -140,14 +142,12 @@ async def root():
 # API info
 @app.get("/info")
 async def get_info():
-    return {"Python":"3.1",
+    return {"Info":"API for chatbot using RAG about PDF documents (also about RAG)",
+            "Python":"3.1",
             "Workflow":"FastAPI",
-            "Context docs":["https://arxiv.org/pdf/2402.16893",
-                "https://arxiv.org/pdf/2312.10997",
-                "https://arxiv.org/pdf/2408.10343",
-                "https://arxiv.org/pdf/2409.14924",
-                "https://arxiv.org/pdf/2406.07348"],
+            "Context docs": pdf_list,
             "Docs split": "chunks of size 1000 with averlaps of 100",
+            "Chunks count": len(docs),
             "LLM":"GPT-4",
             "Retriever":"Pinecone",
             "Retriever metric":"Cosine distance",
