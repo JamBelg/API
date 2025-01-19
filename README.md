@@ -1,4 +1,4 @@
-Chatbot API with Retrieval-Augmented Generation (RAG)
+# Chatbot API with Retrieval-Augmented Generation (RAG)
 
 This repository contains the code for a FastAPI-powered chatbot API built using the Retrieval-Augmented Generation (RAG) framework. The API enables users to ask questions and receive responses based on data retrieved from uploaded documents.
 Features
