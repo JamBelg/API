@@ -4,45 +4,46 @@ This repository contains the code for a FastAPI-powered chatbot API built using 
 
 **Features**
 
-    - Dynamic Document Retrieval: Extracts relevant context from PDFs to answer user queries.
-    
-    - Interactive Endpoints: Endpoints for fetching document content, asking questions, and more.
-    
-    - Scalable Architecture: Easily extensible with features like additional data uploads or user authentication.
+- Dynamic Document Retrieval: Extracts relevant context from PDFs to answer user queries.
+- Interactive Endpoints: Endpoints for fetching document content, asking questions, and more.
+- Scalable Architecture: Easily extensible with features like additional data uploads or user authentication.
 
-Medium Article
+**Medium Article**
 
 This code is part of my Medium article where I explain the concepts and implementation in detail. Check out the article for a step-by-step guide on building and deploying this API.
+
 How to Use
 
-    Clone the Repository
+1- Clone the Repository
 
-git clone https://github.com/your-username/your-repository-name.git
-cd your-repository-name
+    git clone https://github.com/your-username/your-repository-name.git
+    cd your-repository-name
 
-Install Dependencies
+2- Install Dependencies
 
-pip install -r requirements.txt
+    pip install -r requirements.txt
 
-Run the API
+3- Run the API
 
     uvicorn main:app --host 0.0.0.0 --port 8000
 
-    Endpoints
-        GET /: Check if the API is running.
-        GET /page/{index}: Retrieve specific document content.
-        POST /ask: Ask a question based on the documents.
+4- Endpoints
 
-Enhancements
+- GET /: Check if the API is running.
+- GET /page/{index}: Retrieve specific document content.
+- POST /ask: Ask a question based on the documents.
+
+**Enhancements**
 
 This API can be further enhanced by:
 
-    Adding a route to upload new documents dynamically.
-    Implementing user authorization for secure access.
+- Adding a route to upload new documents dynamically.
+- Implementing user authorization for secure access.
 
-Deployment
+**Deployment**
 
 The API is containerized using Docker and can be deployed to platforms like Google Cloud Run for scalable hosting.
-License
+
+**License**
 
 This project is licensed under the MIT License.
