@@ -2,11 +2,13 @@
 
 This repository contains the code for a FastAPI-powered chatbot API built using the Retrieval-Augmented Generation (RAG) framework. The API enables users to ask questions and receive responses based on data retrieved from uploaded documents.
 
-*Features*
+**Features**
 
-    Dynamic Document Retrieval: Extracts relevant context from PDFs to answer user queries.
-    Interactive Endpoints: Endpoints for fetching document content, asking questions, and more.
-    Scalable Architecture: Easily extensible with features like additional data uploads or user authentication.
+    - Dynamic Document Retrieval: Extracts relevant context from PDFs to answer user queries.
+    
+    - Interactive Endpoints: Endpoints for fetching document content, asking questions, and more.
+    
+    - Scalable Architecture: Easily extensible with features like additional data uploads or user authentication.
 
 Medium Article
 
